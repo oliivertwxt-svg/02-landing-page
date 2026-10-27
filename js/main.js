@@ -1,41 +1,41 @@
-const menuToggle = document.querySelector(".menu-toggle");
+const menuToggle = document.querySelector(".header__toggle");
 const primaryNav = document.querySelector("#primary-nav");
 
 menuToggle.addEventListener("click", () => {
   const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
   menuToggle.setAttribute("aria-expanded", String(!isExpanded));
   menuToggle.setAttribute("aria-label", isExpanded ? "Open navigation" : "Close navigation");
-  primaryNav.classList.toggle("is-open", !isExpanded);
+  primaryNav.classList.toggle("header__nav--open", !isExpanded);
 });
 
 primaryNav.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.setAttribute("aria-label", "Open navigation");
-    primaryNav.classList.remove("is-open");
+    primaryNav.classList.remove("header__nav--open");
   });
 });
 
-document.querySelectorAll(".billing-option").forEach((button) => {
+document.querySelectorAll(".pricing__option").forEach((button) => {
   button.addEventListener("click", () => {
     const period = button.dataset.period;
-    document.querySelectorAll(".billing-option").forEach((option) => {
+    document.querySelectorAll(".pricing__option").forEach((option) => {
       const active = option === button;
-      option.classList.toggle("is-active", active);
+      option.classList.toggle("pricing__option--active", active);
       option.setAttribute("aria-pressed", String(active));
     });
 
-    document.querySelectorAll(".price-value").forEach((price) => {
+    document.querySelectorAll(".pricing__value").forEach((price) => {
       const amount = Number(price.dataset[period]);
       price.textContent = amount === 0 ? "$0" : `$${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
     });
-    document.querySelectorAll(".price-period").forEach((label) => {
+    document.querySelectorAll(".pricing__period").forEach((label) => {
       label.textContent = period === "yearly" ? " / month, billed yearly" : " / month";
     });
   });
 });
 
-document.querySelectorAll(".faq-question").forEach((button) => {
+document.querySelectorAll(".faq__question").forEach((button) => {
   button.addEventListener("click", () => {
     const expanded = button.getAttribute("aria-expanded") === "true";
     const panel = document.getElementById(button.getAttribute("aria-controls"));
@@ -44,7 +44,7 @@ document.querySelectorAll(".faq-question").forEach((button) => {
   });
 });
 
-document.querySelectorAll(".price-card [data-plan]").forEach((link) => {
+document.querySelectorAll(".card--price [data-plan]").forEach((link) => {
   link.addEventListener("click", () => {
     document.querySelector("#plan").value = link.dataset.plan;
   });
