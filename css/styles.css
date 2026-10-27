@@ -53,6 +53,7 @@ h1, h2 { font-family: "Manrope", sans-serif; letter-spacing: -.055em; }
 .badge { display: inline-flex; align-items: center; border-radius: 6px; font-size: .5625rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
 
 .header { position: sticky; z-index: 20; top: 0; border-bottom: 1px solid rgba(228, 233, 242, .85); background: rgba(255, 255, 255, .94); backdrop-filter: blur(14px); }
+.header--scrolled { box-shadow: 0 8px 24px rgba(16, 27, 55, .1); }
 .header__inner { display: flex; min-height: 4.25rem; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .brand { display: inline-flex; align-items: center; gap: .625rem; font-family: "Manrope", sans-serif; font-size: .9375rem; font-weight: 600; letter-spacing: .075em; white-space: nowrap; }
 .brand strong { font-weight: 800; }
@@ -178,8 +179,10 @@ h1, h2 { font-family: "Manrope", sans-serif; letter-spacing: -.055em; }
 .faq__icon::before, .faq__icon::after { position: absolute; top: 11px; left: 7px; width: 9px; height: 1px; background: var(--color-brand); content: ""; transition: transform .2s; }
 .faq__icon::after { transform: rotate(90deg); }
 .faq__question[aria-expanded="true"] .faq__icon::after { transform: rotate(0); }
-.faq__answer { padding: 0 2.75rem 1.1875rem 0; color: var(--color-body); font-size: .75rem; line-height: 1.8; }
-.faq__answer p { margin: 0; }
+.faq__answer { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .25s ease, opacity .2s ease; }
+.faq__answer--open { grid-template-rows: 1fr; opacity: 1; }
+.faq__answer-inner { min-height: 0; overflow: hidden; padding-right: 2.75rem; color: var(--color-body); font-size: .75rem; line-height: 1.8; }
+.faq__answer-inner p { margin: 0; padding-bottom: 1.1875rem; }
 
 .signup { position: relative; overflow: hidden; padding-block: var(--space-7); background: #142a64; }
 .signup::before, .signup::after { position: absolute; width: 23.125rem; height: 23.125rem; border: 1px solid rgba(255, 255, 255, .08); border-radius: 50%; content: ""; }
