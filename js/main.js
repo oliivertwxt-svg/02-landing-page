@@ -120,16 +120,87 @@ const initPlanSelection = () => {
 };
 
 /**
- * Displays a local confirmation when the demo signup form is submitted.
+ * Validates signups, prevents duplicate emails, and stores successful entries locally.
  */
 const initSignupForm = () => {
-  document.querySelector("#signup-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const name = new FormData(form).get("name").trim();
+  const form = document.querySelector("#signup-form");
+  const message = document.querySelector("#form-message");
+  const nameInput = form.querySelector("#full-name");
+  const emailInput = form.querySelector("#email");
+  const planInput = form.querySelector("#plan");
+  const termsInput = form.querySelector("#terms");
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const fields = [
+    { input: nameInput, error: document.querySelector("#name-error"), validate: () => nameInput.value.trim().length >= 2, message: "Please enter a name with at least 2 characters." },
+    { input: emailInput, error: document.querySelector("#email-error"), validate: () => emailPattern.test(emailInput.value.trim()), message: "Please enter a valid email address." },
+    { input: planInput, error: document.querySelector("#plan-error"), validate: () => planInput.value !== "", message: "Please choose a plan." },
+    { input: termsInput, error: document.querySelector("#terms-error"), validate: () => termsInput.checked, message: "Please agree to the terms to continue." }
+  ];
 
-    document.querySelector("#form-message").textContent = `Thanks, ${name}! Your AGYE OLIVER sign-up is ready. This demo form doesn't send your details.`;
+  const clearError = (field) => {
+    field.input.removeAttribute("aria-invalid");
+    field.error.textContent = "";
+  };
+
+  const validateField = (field) => {
+    const isValid = field.validate();
+    field.input.setAttribute("aria-invalid", String(!isValid));
+    field.error.textContent = isValid ? "" : field.message;
+    return isValid;
+  };
+
+  fields.forEach((field) => {
+    const eventName = field.input.type === "checkbox" || field.input.tagName === "SELECT" ? "change" : "input";
+
+    field.input.addEventListener(eventName, () => {
+      if (field.input.hasAttribute("aria-invalid")) {
+        validateField(field);
+      }
+      message.textContent = "";
+    });
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const isValid = fields.map(validateField).every(Boolean);
+    if (!isValid) {
+      message.textContent = "";
+      fields.find((field) => field.input.getAttribute("aria-invalid") === "true").input.focus();
+      return;
+    }
+
+    const signup = {
+      name: nameInput.value.trim(),
+      email: emailInput.value.trim(),
+      plan: planInput.value,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      const savedSignups = JSON.parse(localStorage.getItem("signups") || "[]");
+      if (!Array.isArray(savedSignups)) {
+        throw new Error('Stored "signups" data must be an array.');
+      }
+
+      const emailExists = savedSignups.some((entry) =>
+        entry && typeof entry.email === "string" && entry.email.trim().toLowerCase() === signup.email.toLowerCase()
+      );
+      if (emailExists) {
+        message.textContent = "You've already signed up";
+        return;
+      }
+
+      localStorage.setItem("signups", JSON.stringify([...savedSignups, signup]));
+    } catch (error) {
+      console.error("Unable to save signup to localStorage.", error);
+      message.textContent = "We couldn't save your signup in this browser. Please check your storage settings and try again.";
+      return;
+    }
+
     form.reset();
+    fields.forEach(clearError);
+    message.textContent = `Thanks, ${signup.name}! Your sign-up is saved in this browser.`;
   });
 };
 

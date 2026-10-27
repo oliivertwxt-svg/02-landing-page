@@ -208,20 +208,24 @@
             <p>Tell us a little about yourself and we'll help you find your place at AGYE OLIVER.</p>
             <div class="signup__note"><span aria-hidden="true">✦</span> No pressure. Just good things.</div>
           </div>
-          <form class="signup__form" id="signup-form">
+          <form class="signup__form" id="signup-form" novalidate>
             <div class="signup__form-heading"><strong>Let's get to know you</strong><span>All fields are required</span></div>
             <label for="full-name">Full name</label>
-            <input id="full-name" name="name" type="text" autocomplete="name" placeholder="e.g. Ama Mensah" required>
+            <input id="full-name" name="name" type="text" autocomplete="name" placeholder="e.g. Ama Mensah" aria-describedby="name-error" required>
+            <p class="signup__error" id="name-error"></p>
             <label for="email">Email address</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-describedby="email-error" required>
+            <p class="signup__error" id="email-error"></p>
             <label for="plan">Choose your plan</label>
-            <select id="plan" name="plan" required>
+            <select id="plan" name="plan" aria-describedby="plan-error" required>
               <option value="" disabled selected>Select a plan</option>
               <option value="Basic">Basic — free</option>
               <option value="Pro">Pro — $12 / month</option>
               <option value="Business">Business — $39 / month</option>
             </select>
-            <label class="signup__checkbox"><input type="checkbox" name="terms" required><span>I agree to the <a href="#footer">terms</a> and would love to hear from AGYE OLIVER.</span></label>
+            <p class="signup__error" id="plan-error"></p>
+            <label class="signup__checkbox" for="terms"><input id="terms" type="checkbox" name="terms" aria-describedby="terms-error" required><span>I agree to the <a href="#footer">terms</a> and would love to hear from AGYE OLIVER.</span></label>
+            <p class="signup__error" id="terms-error"></p>
             <button class="btn btn--primary signup__submit" type="submit">Get started <span aria-hidden="true">↗</span></button>
             <p class="signup__message" id="form-message" role="status" aria-live="polite"></p>
             <small class="signup__privacy">Your details stay yours. We never share your information.</small>
